@@ -24,7 +24,7 @@ class Welcome extends StatelessWidget {
                     borderRadius:
                         BorderRadius.only(bottomRight: Radius.circular(70)),
                   ),
-                  child: Center(child: Image.asset('1.png', scale: 0.8)),
+                  child: Center(child: Image.asset('images/1.png', scale: 0.8)),
                 )
               ],
             )));
