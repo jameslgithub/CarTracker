@@ -1,3 +1,4 @@
+import 'package:cartracker/pages/home.dart';
 import 'package:flutter/material.dart';
 
 class Welcome extends StatelessWidget {
@@ -61,7 +62,13 @@ class Welcome extends StatelessWidget {
                               color: Color(0xFF674AEF),
                               borderRadius: BorderRadius.circular(15),
                               child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HomePage(),
+                                      ));
+                                },
                                 child: Container(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 60, vertical: 15),
