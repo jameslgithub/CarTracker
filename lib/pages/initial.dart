@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Welcome extends StatelessWidget {
@@ -47,6 +46,7 @@ class Welcome extends StatelessWidget {
                                 letterSpacing: 1,
                                 wordSpacing: .5),
                           ),
+                          SizedBox(height: 15),
                           Padding(
                               padding: EdgeInsets.symmetric(horizontal: 40),
                               child: Text(
@@ -55,6 +55,24 @@ class Welcome extends StatelessWidget {
                                   fontSize: 15,
                                   color: Colors.black.withOpacity(.8),
                                 ),
+                              )),
+                          SizedBox(height: 15),
+                          Material(
+                              color: Color(0xFF674AEF),
+                              borderRadius: BorderRadius.circular(15),
+                              child: InkWell(
+                                onTap: () {},
+                                child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 60, vertical: 15),
+                                    child: Text(
+                                      "Get started",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w100,
+                                          letterSpacing: 1),
+                                    )),
                               ))
                         ],
                       ),
