@@ -51,7 +51,7 @@ class Welcome extends StatelessWidget {
                           Padding(
                               padding: EdgeInsets.symmetric(horizontal: 40),
                               child: Text(
-                                "Allow location access and add your vehical to log the parking spot!",
+                                "Allow location access and add your vehicle to log the parking spot!",
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.black.withOpacity(.8),
@@ -66,7 +66,7 @@ class Welcome extends StatelessWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => HomePage(),
+                                        builder: (context) => MapSample(),
                                       ));
                                 },
                                 child: Container(
