@@ -20,19 +20,41 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: addCar,
-        label: const Text('Add car'),
-        icon: const Icon(Icons.add_circle),
-      ),
+    return Stack(
+      children: [
+        Scaffold(
+          body: GoogleMap(
+            mapType: MapType.hybrid,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: addCar,
+            label: const Text('Add car'),
+            icon: const Icon(Icons.add_circle),
+          ),
+        ),
+        Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2.5,
+              decoration: BoxDecoration(color: Colors.white),
+              child: Column(children: [
+                Text(
+                  "Select car to track",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                      wordSpacing: .5,
+                      color: Colors.black),
+                ),
+              ]),
+            ))
+      ],
     );
   }
 
