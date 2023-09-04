@@ -11,9 +11,30 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  // final Completer<GoogleMapController> _controller =
-  //     Completer<GoogleMapController>();
-  late GoogleMapController googleMapController;
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+
+  LatLng? _position;
+
+  void _getCurrentLocation() async {
+    var position = await GeolocatorPlatform.instance.getCurrentPosition(
+        locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.bestForNavigation));
+
+    setState(() {
+      _position = LatLng(position.latitude, position.longitude);
+      print(_position);
+    });
+    // changeposition(_position);
+  }
+
+  static changeposition(pos) {
+    CameraPosition(
+      target: pos,
+      zoom: 14.4746,
+    );
+    print(pos);
+  }
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -29,20 +50,13 @@ class MapSampleState extends State<MapSample> {
             mapType: MapType.hybrid,
             initialCameraPosition: _kGooglePlex,
             onMapCreated: (GoogleMapController controller) {
-              googleMapController = controller;
+              _controller.complete(controller);
             },
           ),
           floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              Position position = await userPosition();
-
-              googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                      target: LatLng(position.latitude, position.longitude),
-                      zoom: 14)));
-            },
-            label: Padding(padding: EdgeInsets.all(0)),
-            icon: const Icon(Icons.my_location),
+            onPressed: _getCurrentLocation,
+            label: const Text(''),
+            icon: const Icon(Icons.add_circle),
           ),
         ),
         // Align(
@@ -67,31 +81,19 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
-  Future<Position> userPosition() async {
-    bool serviceEnabled;
+  Future<Position> detPosition() async {
     LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
 
     permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-
       if (permission == LocationPermission.denied) {
-        return Future.error('Location Permission denied');
+        return Future.error('Location Permissions are denied');
       }
     }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location services are permantently denied');
-    }
-
-    Position position = await Geolocator.getCurrentPosition();
-
-    return position;
+    var curPos =
+        Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return await curPos;
   }
 }
