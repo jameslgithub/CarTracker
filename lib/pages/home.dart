@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator_android/geolocator_android.dart';
 
 class MapSample extends StatefulWidget {
   const MapSample({super.key});
@@ -71,7 +70,6 @@ class MapSampleState extends State<MapSample> {
   Future<Position> userPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-    GeolocatorAndroid.registerWith();
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
