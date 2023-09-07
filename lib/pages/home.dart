@@ -24,8 +24,8 @@ class MapSampleState extends State<MapSample> {
     setState(() {
       _position = LatLng(position.latitude, position.longitude);
       print(_position);
+      changeposition(_position);
     });
-    // changeposition(_position);
   }
 
   static changeposition(pos) {
@@ -94,6 +94,6 @@ class MapSampleState extends State<MapSample> {
     }
     var curPos =
         Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    return await curPos;
+    return await changeposition(curPos);
   }
 }
