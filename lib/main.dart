@@ -1,3 +1,4 @@
+import 'package:cartracker/pages/home.dart';
 import 'package:cartracker/pages/initial.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: Welcome());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: MapSample());
   }
 }
