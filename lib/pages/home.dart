@@ -12,11 +12,10 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng sourceLocation = LatLng(40.7565, -73.9825);
-  static const LatLng destination = LatLng(40.7521, -73.9923);
+  static const LatLng sourceLocation = LatLng(40.7540, -73.9846);
+  static const LatLng destination = LatLng(40.7534, -73.9899);
 
   LocationData? currentLocation;
   List<LatLng> polylineCoordinates = [];
@@ -37,12 +36,31 @@ class MapSampleState extends State<MapSample> {
     }
   }
 
-  void getCurrentLocation() {
+  void getCurrentLocation() async {
     Location location = Location();
 
     location.getLocation().then(
       (location) {
         currentLocation = location;
+      },
+    );
+    // location.changeSettings(
+    //     accuracy: LocationAccuracy.high, interval: 1, distanceFilter: 0.1);
+    GoogleMapController googleMapController = await _controller.future;
+
+    location.onLocationChanged.listen(
+      (newLoc) {
+        currentLocation = newLoc;
+
+        googleMapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              zoom: 14,
+              target: LatLng(newLoc.latitude!, newLoc.longitude!),
+            ),
+          ),
+        );
+        setState(() {});
       },
     );
   }
@@ -85,14 +103,22 @@ class MapSampleState extends State<MapSample> {
                 ),
               },
               markers: {
-                Marker(
+                const Marker(
                   markerId: MarkerId("source"),
                   position: sourceLocation,
                 ),
                 Marker(
+                  markerId: MarkerId("currentLocation"),
+                  position: LatLng(
+                      currentLocation!.latitude!, currentLocation!.longitude!),
+                ),
+                const Marker(
                   markerId: MarkerId("destination"),
                   position: destination,
                 )
+              },
+              onMapCreated: (mapController) {
+                _controller.complete(mapController);
               },
             ),
     );
