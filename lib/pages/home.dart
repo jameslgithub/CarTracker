@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class MapSample extends StatefulWidget {
   const MapSample({super.key});
@@ -14,26 +15,17 @@ class MapSampleState extends State<MapSample> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
-  LatLng? _position;
+  static const LatLng sourceLocation = LatLng(37, -122);
+  LocationData? currentLocation;
 
-  void _getCurrentLocation() async {
-    var position = await GeolocatorPlatform.instance.getCurrentPosition(
-        locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.bestForNavigation));
+  void getCurrentLocation() {
+    Location location = Location();
 
-    setState(() {
-      _position = LatLng(position.latitude, position.longitude);
-      print(_position);
-      changeposition(_position);
-    });
-  }
-
-  static changeposition(pos) {
-    CameraPosition(
-      target: pos,
-      zoom: 14.4746,
+    location.getLocation().then(
+      (location) {
+        currentLocation = location;
+      },
     );
-    print(pos);
   }
 
   static const CameraPosition _kGooglePlex = CameraPosition(
@@ -41,59 +33,42 @@ class MapSampleState extends State<MapSample> {
     zoom: 14.4746,
   );
 
+  static const CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+
   @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          body: GoogleMap(
-            mapType: MapType.hybrid,
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: _getCurrentLocation,
-            label: const Text(''),
-            icon: const Icon(Icons.add_circle),
-          ),
-        ),
-        // Align(
-        //     alignment: Alignment.bottomCenter,
-        //     child: Container(
-        //       width: MediaQuery.of(context).size.width,
-        //       height: MediaQuery.of(context).size.height / 2.5,
-        //       decoration: BoxDecoration(color: Colors.white),
-        //       child: Column(children: [
-        //         Text(
-        //           "Select car to track",
-        //           style: TextStyle(
-        //               fontSize: 20,
-        //               fontWeight: FontWeight.bold,
-        //               letterSpacing: 1,
-        //               wordSpacing: .5,
-        //               color: Colors.black),
-        //         ),
-        //       ]),
-        //     ))
-      ],
-    );
+  void initState() {
+    getCurrentLocation();
+    super.initState();
   }
 
-  Future<Position> detPosition() async {
-    LocationPermission permission;
-
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location Permissions are denied');
-      }
-    }
-    var curPos =
-        Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    return await changeposition(curPos);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Welcome Back",
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
+      ),
+      body: currentLocation == null
+          ? Text("Loading")
+          : GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                    currentLocation!.latitude!, currentLocation!.longitude!),
+                zoom: 14.5,
+              ),
+              markers: {
+                Marker(
+                  markerId: MarkerId("source"),
+                  position: sourceLocation,
+                )
+              },
+            ),
+    );
   }
 }
