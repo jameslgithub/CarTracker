@@ -55,7 +55,7 @@ class MapSampleState extends State<MapSample> {
         googleMapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
-              zoom: 14,
+              zoom: 17,
               target: LatLng(newLoc.latitude!, newLoc.longitude!),
             ),
           ),
@@ -92,7 +92,7 @@ class MapSampleState extends State<MapSample> {
               initialCameraPosition: CameraPosition(
                 target: LatLng(
                     currentLocation!.latitude!, currentLocation!.longitude!),
-                zoom: 14.5,
+                zoom: 30,
               ),
               polylines: {
                 Polyline(
