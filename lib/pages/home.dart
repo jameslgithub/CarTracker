@@ -14,11 +14,13 @@ class MapSample extends StatefulWidget {
 class MapSampleState extends State<MapSample> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng sourceLocation = LatLng(40.7540, -73.9846);
-  static const LatLng destination = LatLng(40.7534, -73.9899);
+  static const LatLng sourceLocation = LatLng(40.7532, -73.9903);
+  static const LatLng destination = LatLng(40.7536, -73.9850);
 
+  Set<Polyline> _polylines = Set<Polyline>();
   LocationData? currentLocation;
   List<LatLng> polylineCoordinates = [];
+  late PolylinePoints polylinePoints;
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
@@ -26,13 +28,19 @@ class MapSampleState extends State<MapSample> {
         "AIzaSyD2tCcVQU5PsN2Hsr4im8FZY-NxeUWov0A",
         PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
         PointLatLng(destination.latitude, destination.longitude));
-    if (result.points.isNotEmpty) {
+    if (result.status == 'OK') {
       result.points.forEach(
         (PointLatLng point) => polylineCoordinates.add(
           LatLng(point.latitude, point.longitude),
         ),
       );
-      setState(() {});
+      setState(() {
+        _polylines.add(Polyline(
+            width: 10,
+            polylineId: PolylineId('polyLine'),
+            color: Color(0xFF08A5CB),
+            points: polylineCoordinates));
+      });
     }
   }
 
@@ -44,8 +52,8 @@ class MapSampleState extends State<MapSample> {
         currentLocation = location;
       },
     );
-    // location.changeSettings(
-    //     accuracy: LocationAccuracy.high, interval: 1, distanceFilter: 0.1);
+    location.changeSettings(
+        accuracy: LocationAccuracy.high, interval: 1, distanceFilter: 0.1);
     GoogleMapController googleMapController = await _controller.future;
 
     location.onLocationChanged.listen(
@@ -73,7 +81,7 @@ class MapSampleState extends State<MapSample> {
   @override
   void initState() {
     getCurrentLocation();
-    getPolyPoints();
+    polylinePoints = PolylinePoints();
     super.initState();
   }
 
@@ -82,26 +90,33 @@ class MapSampleState extends State<MapSample> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Welcome Back",
+          "Welcome Bac",
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
       body: currentLocation == null
           ? const Center(child: Text("Loading"))
           : GoogleMap(
+              myLocationEnabled: true,
+              mapType: MapType.normal,
+
               initialCameraPosition: CameraPosition(
                 target: LatLng(
                     currentLocation!.latitude!, currentLocation!.longitude!),
                 zoom: 30,
               ),
-              polylines: {
-                Polyline(
-                  polylineId: PolylineId("route"),
-                  points: polylineCoordinates,
-                  color: Color(0xFF674AEF),
-                  width: 5,
-                ),
-              },
+              padding: EdgeInsets.only(
+                top: 40.0,
+              ),
+              polylines: _polylines,
+              // {
+              //   Polyline(
+              //     polylineId: PolylineId("route"),
+              //     points: polylineCoordinates,
+              //     color: Color(0xFF674AEF),
+              //     width: 5,
+              //   ),
+              // },
               markers: {
                 const Marker(
                   markerId: MarkerId("source"),
@@ -119,6 +134,8 @@ class MapSampleState extends State<MapSample> {
               },
               onMapCreated: (mapController) {
                 _controller.complete(mapController);
+
+                getPolyPoints();
               },
             ),
     );
