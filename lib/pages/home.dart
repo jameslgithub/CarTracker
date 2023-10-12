@@ -14,7 +14,7 @@ class MapSample extends StatefulWidget {
 class MapSampleState extends State<MapSample> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng sourceLocation = LatLng(40.7532, -73.9903);
+  static const LatLng sourceLocation = LatLng(40.7533, -73.9904);
   static const LatLng destination = LatLng(40.7536, -73.9850);
 
   Set<Polyline> _polylines = Set<Polyline>();
@@ -27,7 +27,8 @@ class MapSampleState extends State<MapSample> {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         "AIzaSyD2tCcVQU5PsN2Hsr4im8FZY-NxeUWov0A",
         PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
-        PointLatLng(destination.latitude, destination.longitude));
+        PointLatLng(destination.latitude, destination.longitude),
+        travelMode: TravelMode.walking);
     if (result.status == 'OK') {
       result.points.forEach(
         (PointLatLng point) => polylineCoordinates.add(
@@ -90,7 +91,7 @@ class MapSampleState extends State<MapSample> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Welcome Bac",
+          "Welcome Back",
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
@@ -122,11 +123,11 @@ class MapSampleState extends State<MapSample> {
                   markerId: MarkerId("source"),
                   position: sourceLocation,
                 ),
-                Marker(
-                  markerId: MarkerId("currentLocation"),
-                  position: LatLng(
-                      currentLocation!.latitude!, currentLocation!.longitude!),
-                ),
+                // Marker(
+                //   markerId: MarkerId("currentLocation"),
+                //   position: LatLng(
+                //       currentLocation!.latitude!, currentLocation!.longitude!),
+                // ),
                 const Marker(
                   markerId: MarkerId("destination"),
                   position: destination,
