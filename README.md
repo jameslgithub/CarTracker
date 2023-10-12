@@ -1,16 +1,23 @@
 # cartracker
 
-A new Flutter project.
+Flutter Google Maps Integration
+This Flutter application integrates Google Maps API and allows for features such as displaying a map with a user's current location and drawing a polyline route from the user's current location to a specified destination (Parked vehicle location). 
 
-## Getting Started
+## Prerequisites
+To use this code, you must add the following dependencies to your pubspec.yaml file:
 
-This project is a starting point for a Flutter application.
+```yaml
+Copy code
+dependencies:
+  flutter:
+    sdk: flutter
+  google_maps_flutter: ^2.0.3
+  location: ^4.0.2
+  flutter_polyline_points: ^0.3.0
+```
 
-A few resources to get you started if this is your first Flutter project:
+Add the required dependencies to your pubspec.yaml.
+Create a Flutter app and boot through an android emulator.
+Run your app using flutter run.
+Make sure to replace the API key in the getPolyPoints method with your own Google Maps API key for this code to work correctly.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
