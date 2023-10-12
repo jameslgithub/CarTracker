@@ -26,10 +26,10 @@ class MapSampleState extends State<MapSample> {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         "AIzaSyD2tCcVQU5PsN2Hsr4im8FZY-NxeUWov0A",
-        PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
+        PointLatLng(currentLocation!.latitude!, currentLocation!.longitude!),
         PointLatLng(destination.latitude, destination.longitude),
         travelMode: TravelMode.walking);
-    if (result.status == 'OK') {
+    if (result.points.isNotEmpty) {
       result.points.forEach(
         (PointLatLng point) => polylineCoordinates.add(
           LatLng(point.latitude, point.longitude),
@@ -60,7 +60,6 @@ class MapSampleState extends State<MapSample> {
     location.onLocationChanged.listen(
       (newLoc) {
         currentLocation = newLoc;
-
         googleMapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
@@ -91,7 +90,7 @@ class MapSampleState extends State<MapSample> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Welcome Back",
+          "Welcome Bac",
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
@@ -119,10 +118,10 @@ class MapSampleState extends State<MapSample> {
               //   ),
               // },
               markers: {
-                const Marker(
-                  markerId: MarkerId("source"),
-                  position: sourceLocation,
-                ),
+                // const Marker(
+                //   markerId: MarkerId("source"),
+                //   position: sourceLocation,
+                // ),
                 // Marker(
                 //   markerId: MarkerId("currentLocation"),
                 //   position: LatLng(
