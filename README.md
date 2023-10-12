@@ -1,4 +1,4 @@
-# cartracker
+# Android Car Tracker using Google Maps API
 
 Flutter Google Maps Integration
 This Flutter application integrates Google Maps API and allows for features such as displaying a map with a user's current location and drawing a polyline route from the user's current location to a specified destination (Parked vehicle location). 
